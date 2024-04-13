@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "223706374864",
+    "project_id": "tiffen-wala-d52e3",
+    "storage_bucket": "tiffen-wala-d52e3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:223706374864:android:cb47f13a0bbb362eb374d5",
+        "android_client_info": {
+          "package_name": "com.app.tiffen_wala"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZCr7qj1nCpPxBkFoasvtcv9sPWxhHPT0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:223706374864:android:12c515ad13623d06b374d5",
+        "android_client_info": {
+          "package_name": "com.app.tiffen_wala_user"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZCr7qj1nCpPxBkFoasvtcv9sPWxhHPT0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
