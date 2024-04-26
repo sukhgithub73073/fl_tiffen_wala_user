@@ -15,6 +15,7 @@ class PropertyBloc extends Bloc<PropertyEvent, PropertyState> {
 
   PropertyBloc() : super(PropertyInitial()) {
     on<GetPropertyListEvent>(_getPropertyList);
+    on<AddPropertyEvent>(_addProperty);
   }
 
   Future<FutureOr<void>> _getPropertyList(
@@ -24,10 +25,24 @@ class PropertyBloc extends Bloc<PropertyEvent, PropertyState> {
       var list = await propertyRepository.getPropertyApi(event.map);
       print("_getPropertyList>>>>>>>>>>>${list.length}") ;
       emit(PropertySuccess(propertyList: list));
-    } catch (e) {
+    } catch (e , t) {
       emit(PropertyError(error: e.toString()));
-      print("_getPropertyList>>>>>>>>>>>EXCEPTION${e}") ;
+      print("_getPropertyList>>>>>>>>>>>EXCEPTION${e} $t") ;
 
     }
+  }
+
+  Future<FutureOr<void>> _addProperty(AddPropertyEvent event, Emitter<PropertyState> emit) async {
+    try {
+      emit(PropertyLoading());
+      var list = await propertyRepository.addPropertyApi(event.map);
+      print("_getPropertyList>>>>>>>>>>>${list.length}") ;
+      emit(PropertySuccess(propertyList: list));
+    } catch (e,t) {
+      emit(PropertyError(error: e.toString()));
+      print("_addProperty>>>>>>>>>>>EXCEPTION${e} $t") ;
+
+    }
+
   }
 }

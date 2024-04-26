@@ -10,7 +10,7 @@ import 'package:tiffen_wala_user/features/splash/splash_screen.dart';
 import 'package:tiffen_wala_user/routes/main_router.dart';
 import 'package:tiffen_wala_user/common/constants/colors.dart';
 import 'package:tiffen_wala_user/firebase_options.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -54,27 +54,19 @@ class MyApp extends StatelessWidget {
     return AppBlocProvider(
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        onGenerateTitle: (context) => AppLocalizations.of(context)!.appName,
         localizationsDelegates: [
-          AppLocalizations.delegate, // Add this line
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: const [
-          Locale('en'), // English
-          Locale('hi'), // Spanish
-          Locale('or'), // Spanish
+          Locale('en'),
+
         ],
         theme: ThemeData(
           fontFamily: "custom_font",
-          // appBarTheme: const AppBarTheme(
-          //   systemOverlayStyle: SystemUiOverlayStyle(
-          //       systemNavigationBarColor: navigationBarColor,
-          //       systemNavigationBarDividerColor: white,
-          //       systemNavigationBarContrastEnforced: true,
-          //       systemNavigationBarIconBrightness: Brightness.light),
-          // ),
+
+
           textTheme: TextTheme(
             displayLarge: displayTextStyle,
             displayMedium: displayTextStyle.copyWith(

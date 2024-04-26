@@ -1,4 +1,4 @@
-class UserData {
+class UserModel {
   final String name;
   final String email;
   final String phone;
@@ -6,7 +6,7 @@ class UserData {
   final String uid;
   final String profileImage;
 
-  UserData(
+  UserModel(
       {required this.name,
       required this.email,
       required this.address,
@@ -25,8 +25,8 @@ class UserData {
     };
   }
 
-  factory UserData.fromMap(Map<String, dynamic> map) {
-    return UserData(
+  factory UserModel.fromMap(Map<String, dynamic> map) {
+    return UserModel(
       name: map['name'] as String,
       email: map['email'] as String,
       phone: map['phone'] as String,

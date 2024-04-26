@@ -31,10 +31,9 @@ class _SplashScreenState extends State<SplashScreen>
       Future.delayed(const Duration(milliseconds: 750), () {
         controller.forward();
         Future.delayed(const Duration(seconds: 2), () {
-
-          context.pushReplacementScreen(nextScreen: MainHomeScreen()) ;
-          // Navigator.pushNamedAndRemoveUntil(
-          //     context, LoginScreen.routeName, (route) => false);
+         // context.pushReplacementScreen(nextScreen: MainHomeScreen()) ;
+          Navigator.pushNamedAndRemoveUntil(
+              context, LoginScreen.routeName, (route) => false);
         });
       });
     });

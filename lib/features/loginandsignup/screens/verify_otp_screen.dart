@@ -1,26 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pinput/pinput.dart';
+import 'package:tiffen_wala_user/blocs/auth_bloc/auth_bloc.dart';
 import 'package:tiffen_wala_user/common/constants/colors.dart';
-import 'package:tiffen_wala_user/common/utils/utils.dart';
+import 'package:tiffen_wala_user/common/utils/app_extension.dart';
 import 'package:tiffen_wala_user/features/home/main_home/screens/main_home_screen.dart';
-import 'package:tiffen_wala_user/features/loginandsignup/controller/login_signup_controller.dart';
 
-class VerifyOTPScreen extends ConsumerStatefulWidget {
-  static const routeName = "/verify-otp-screen";
-  final String verificationId;
-  final int? resendToken;
-  final String phoneNumber;
+class VerifyOTPScreen extends StatefulWidget {
+  final String mobile, verificationId;
 
-  const VerifyOTPScreen(this.verificationId, this.resendToken, this.phoneNumber,
-      {Key? key})
-      : super(key: key);
+  const VerifyOTPScreen(
+      {super.key, required this.mobile, required this.verificationId});
 
   @override
-  ConsumerState<VerifyOTPScreen> createState() => _VerifyOTPScreenState();
+  State<VerifyOTPScreen> createState() => _VerifyOTPScreenState();
 }
 
-class _VerifyOTPScreenState extends ConsumerState<VerifyOTPScreen> {
+class _VerifyOTPScreenState extends State<VerifyOTPScreen> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -57,104 +53,83 @@ class _VerifyOTPScreenState extends ConsumerState<VerifyOTPScreen> {
         elevation: 0,
       ),
       backgroundColor: white,
-      body: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(
-              height: 20,
-            ),
-            Text(
-              "We have sent a verification code to",
-              style: textTheme.bodyLarge?.copyWith(fontSize: 16),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            Text(
-              widget.phoneNumber,
-              style: textTheme.titleSmall,
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Pinput(
-                defaultPinTheme: defaultPinTheme,
-                submittedPinTheme: submittedPinTheme,
-                length: 6,
-                pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
-                showCursor: true,
-                onCompleted: verifyPin,
-              ),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            StreamBuilder(
-              stream: ref.read(loginSignUpControllerProvider).getResendTime(),
-              builder: (context, snapshot) {
-                final btnText = snapshot.data == null || snapshot.data == 0
-                    ? "Resend SMS"
-                    : "Resend SMS in ${snapshot.data}";
-                return OutlinedButton(
-                  onPressed: () {
-                    setState(() {
-                      showLoaderDialog(context);
-                    });
-                  },
+      body: BlocConsumer<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if(state is AuthSuccess){
+            context.pushReplacementScreen(nextScreen: MainHomeScreen()) ;
+          }
+        },
+        builder: (context, state) {
+          return Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  "We have sent a verification code to",
+                  style: textTheme.bodyLarge?.copyWith(fontSize: 16),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                Text(
+                  "${widget.mobile}",
+                  style: textTheme.titleSmall,
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Pinput(
+                    defaultPinTheme: defaultPinTheme,
+                    submittedPinTheme: submittedPinTheme,
+                    length: 6,
+                    pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
+                    showCursor: true,
+                    onCompleted: (pin) {
+                      context.read<AuthBloc>().add(OtpVerificationAuthEvent(
+                              map: {
+                                "otp": pin,
+                                "verificationId": widget.verificationId
+                              }));
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                OutlinedButton(
+                  onPressed: () {},
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.all(15),
                     side: BorderSide(
-                      color: snapshot.data == 0 ? primaryColor : midGrey,
+                      color: midGrey,
                     ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(7.0),
                     ),
                   ),
                   child: Text(
-                    btnText,
-                    style: textTheme.labelSmall?.copyWith(
-                        color: snapshot.data == 0 ? primaryColor : midGrey,
-                        fontSize: 16),
+                    "Resend",
+                    style: textTheme.labelSmall
+                        ?.copyWith(color: midGrey, fontSize: 16),
                   ),
-                );
-              },
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                Text(
+                  "Try other login methods",
+                  style: textTheme.labelSmall?.copyWith(color: primaryColor),
+                ),
+              ],
             ),
-            const SizedBox(
-              height: 30,
-            ),
-            Text(
-              "Try other login methods",
-              style: textTheme.labelSmall?.copyWith(color: primaryColor),
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
-  }
-
-  void verifyPin(String pin) {
-    showLoaderDialog(context);
-    Future.delayed(
-      const Duration(seconds: 3),
-      () {
-        Navigator.pop(context);
-        showSnackBar(context, "Success");
-        Navigator.pushNamed(context, MainHomeScreen.routeName);
-      },
-    );
-    // ref
-    //     .read(loginSignUpControllerProvider)
-    //     .verifyOTP(widget.verificationId, pin)
-    //     .then((value) {
-    //   if (value) {
-    //     showSnackBar(context, "Success");
-    //   } else {
-    //     showSnackBar(context, "Verification Failed Wrong OTP");
-    //   }
-    //   Navigator.pop(context);
-    // });
   }
 }

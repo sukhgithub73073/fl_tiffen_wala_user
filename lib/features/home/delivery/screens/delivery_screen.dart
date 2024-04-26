@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
+import 'package:tiffen_wala_user/blocs/auth_bloc/auth_bloc.dart';
 import 'package:tiffen_wala_user/blocs/location_bloc/location_bloc.dart';
 import 'package:tiffen_wala_user/blocs/property_bloc/property_bloc.dart';
 import 'package:tiffen_wala_user/blocs/restaurant_bloc/restaurant_bloc.dart';
@@ -29,7 +30,6 @@ class DeliveryScreen extends ConsumerStatefulWidget {
 }
 
 class _DeliveryScreenState extends ConsumerState<DeliveryScreen> {
-  var location = "Delhi";
   final searchController = TextEditingController();
   final List<String> imageUrls = [
     "assets/images/zomato_offer_icon.png",
@@ -98,12 +98,11 @@ class _DeliveryScreenState extends ConsumerState<DeliveryScreen> {
                               context
                                   .read<PropertyBloc>()
                                   .add(GetPropertyListEvent(map: {
-                                "latitute":
-                                state.currentLocationModel.latitute,
-                                "longitude":
-                                state.currentLocationModel.longitude,
-                              }));
-
+                                    "latitute":
+                                        state.currentLocationModel.latitute,
+                                    "longitude":
+                                        state.currentLocationModel.longitude,
+                                  }));
                             } else {}
                           },
                           builder: (context, state) {
@@ -168,17 +167,23 @@ class _DeliveryScreenState extends ConsumerState<DeliveryScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(
+                      SizedBox(
                         width: 10,
                       ),
                       GestureDetector(
                         onTap: () {
                           ref.watch(homeNavigation.notifier).state = 1;
                         },
-                        child: const CircularImage(
-                          imageLink:
-                              "https://cdn.pixabay.com/photo/2018/02/08/22/27/flower-3140492_1280.jpg",
-                          radius: 19,
+                        child: BlocConsumer<AuthBloc, AuthState>(
+                          listener: (context, state) {
+                          },
+                          builder: (context, state) {
+                            return CircularImage(
+                              imageLink:
+                                  state is AuthSuccess ? state.userModel.profileImage :  "https://cdn.pixabay.com/photo/2018/02/08/22/27/flower-3140492_1280.jpg",
+                              radius: 19,
+                            );
+                          },
                         ),
                       ),
                     ],
@@ -242,7 +247,6 @@ class _DeliveryScreenState extends ConsumerState<DeliveryScreen> {
                         horizontal: 15, vertical: 10),
                     child: Column(
                       children: [
-
                         const SizedBox(
                           height: 20,
                         ),
