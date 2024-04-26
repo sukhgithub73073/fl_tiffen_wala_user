@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tiffen_wala_user/blocs/app_type_bloc/app_type_bloc.dart';
+import 'package:tiffen_wala_user/blocs/app_type_bloc/app_type_bloc.dart';
 import 'package:tiffen_wala_user/common/constants/colors.dart';
-import 'package:tiffen_wala_user/features/loginandsignup/controller/login_signup_controller.dart';
+import 'package:tiffen_wala_user/common/enums/app_type_enum.dart';
+import 'package:tiffen_wala_user/common/widgets/custom_button.dart';
 import 'package:tiffen_wala_user/features/home/profile/widgets/profile_header_widget.dart';
 import 'package:tiffen_wala_user/navigation/navigation.dart';
 
@@ -48,12 +52,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         child: Column(
                           children: [
                             SizedBox(
-                              height: ref.read(loginSignUpControllerProvider).isUserSigned ? 155 : 115,
+                              height: true ? 155
+                                  : 115,
                             ),
-                            likesPaymentsSettingsWidget(),
-                            const SizedBox(
-                              height: 12,
-                            ),
+                            // likesPaymentsSettingsWidget(),
+                            // const SizedBox(
+                            //   height: 12,
+                            // ),
 
                             listItemLabelWidget(
                               icon: Icons.person_outline_rounded,
@@ -111,11 +116,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                               ),
                               onClick: () {},
                             ),
+
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(vertical: 12.0),
                               child: foodOrdersSection(),
                             ),
+
                             // couponsSection(),
                             // Padding(
                             //   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -123,8 +130,61 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             // ),
                             // moneySection(),
                             Padding(
-                              padding: const EdgeInsets.only(top: 12, bottom: 100),
+                              padding:
+                                  const EdgeInsets.only(top: 12, bottom: 20),
                               child: moreSection(),
+                            ),
+
+                            BlocConsumer<AppTypeBloc, AppTypeState>(
+                              listener: (context, state) {},
+                              builder: (context, state) {
+                                String buttonTitle = "";
+                                if (state is AppTypeFood &&
+                                    state.appTypeEnum ==
+                                        AppTypeEnum.foodUser) {}
+
+                                return Padding(
+                                  padding:
+                                      EdgeInsets.only(top: 12, bottom: 100),
+                                  child: CustomButton(
+                                      text: (state is AppTypeFood &&
+                                              state.appTypeEnum ==AppTypeEnum.foodUser)
+                                          ? "Food Vendor App"
+                                          : (state is AppTypeFood &&
+                                                  state.appTypeEnum ==
+                                                      AppTypeEnum.foodVendor)
+                                              ? "Food User App"
+                                              : (state is AppTypeProperty &&
+                                                      state.appTypeEnum ==
+                                                          AppTypeEnum
+                                                              .propertyUser)
+                                                  ? "Property Vendor App"
+                                                  : "Property User App",
+                                      onPressed: () {
+                                        context.read<AppTypeBloc>().add(
+                                            ChangeAppTypeEvent(
+                                                appTypeEnum: (state
+                                                            is AppTypeFood &&
+                                                        state.appTypeEnum ==
+                                                            AppTypeEnum
+                                                                .foodUser)
+                                                    ? AppTypeEnum.foodVendor
+                                                    : (state is AppTypeFood &&
+                                                            state.appTypeEnum ==
+                                                                AppTypeEnum
+                                                                    .foodVendor)
+                                                        ? AppTypeEnum.foodUser
+                                                        : (state is AppTypeProperty &&
+                                                                state.appTypeEnum ==
+                                                                    AppTypeEnum
+                                                                        .propertyUser)
+                                                            ? AppTypeEnum
+                                                                .propertyVendor
+                                                            : AppTypeEnum
+                                                                .propertyUser));
+                                      }),
+                                );
+                              },
                             ),
                           ],
                         ),
@@ -304,35 +364,40 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       );
 
   Widget foodOrdersSection() => addBorderSection(
-        Column(
-          children: [
-            headerItem(title: "Food Orders"),
-            listItemLabelWidget(
-              label: "Your orders",
-              imageIcon: "${baseImageLocation}delivery_packet_icon.png",
-              onClick: () {},
-            ),
-            listItemLabelWidget(
-              label: "Favorite orders",
-              imageIcon: "${baseImageLocation}likes_icon.png",
-              onClick: () {},
-            ),
-            listItemLabelWidget(
-              label: "Address book",
-              imageIcon: "${baseImageLocation}address_icon.png",
-              onClick: () {},
-            ),
-            listItemLabelWidget(
-              label: "Hidden Restaurants",
-              icon: Icons.visibility_off_outlined,
-              onClick: () {},
-            ),
-            listItemLabelWidget(
-              label: "Online ordering help",
-              imageIcon: "${baseImageLocation}chat.png",
-              onClick: () {},
-            ),
-          ],
+        BlocConsumer<AppTypeBloc, AppTypeState>(
+          listener: (context, state) {},
+          builder: (context, state) {
+            return Column(
+              children: [
+                headerItem(title: "Orders Management"),
+                listItemLabelWidget(
+                  label: "Your orders",
+                  imageIcon: "${baseImageLocation}delivery_packet_icon.png",
+                  onClick: () {},
+                ),
+                listItemLabelWidget(
+                  label: "Favorite orders",
+                  imageIcon: "${baseImageLocation}likes_icon.png",
+                  onClick: () {},
+                ),
+                listItemLabelWidget(
+                  label: "Address book",
+                  imageIcon: "${baseImageLocation}address_icon.png",
+                  onClick: () {},
+                ),
+                listItemLabelWidget(
+                  label: "Hidden Restaurants",
+                  icon: Icons.visibility_off_outlined,
+                  onClick: () {},
+                ),
+                listItemLabelWidget(
+                  label: "Online ordering help",
+                  imageIcon: "${baseImageLocation}chat.png",
+                  onClick: () {},
+                ),
+              ],
+            );
+          },
         ),
       );
 

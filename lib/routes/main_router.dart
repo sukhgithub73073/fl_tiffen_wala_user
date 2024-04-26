@@ -33,13 +33,9 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
     case SearchScreen.routeName:
       page = const SearchScreen();
       break;
-    case VerifyOTPScreen.routeName:
-      final arguments = routeSettings.arguments as Map<String, dynamic>;
-      final verificationId = arguments["verificationId"] as String;
-      final resendToken = arguments["resendToken"] as int?;
-      final phoneNumber = arguments["phoneNumber"] as String;
-      page = VerifyOTPScreen(verificationId, resendToken, phoneNumber);
-      break;
+
+
+
     case ChooseDeliveryLocationScreen.routeName:
       page = const ChooseDeliveryLocationScreen();
       break;

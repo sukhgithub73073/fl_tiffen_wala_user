@@ -10,6 +10,8 @@ PropertyModel propertyModelFromJson(String str) =>
 String propertyModelToJson(PropertyModel data) => json.encode(data.toJson());
 
 class PropertyModel {
+  String id;
+  String seller_id;
   String title;
   String description;
   int area;
@@ -26,6 +28,8 @@ class PropertyModel {
   List<ImagesList> imagesList ;
 
   PropertyModel({
+    required this.id,
+    required this.seller_id,
     required this.title,
     required this.description,
     required this.area,
@@ -44,6 +48,8 @@ class PropertyModel {
 
   factory PropertyModel.fromJson(Map<String, dynamic> json) =>
       PropertyModel(
+        id: json["id"],
+        seller_id: json["seller_id"],
         title: json["title"],
         description: json["description"],
         area: json["area"],
@@ -64,6 +70,8 @@ class PropertyModel {
 
   Map<String, dynamic> toJson() =>
       {
+        "id": id,
+        "seller_id": seller_id,
         "title": title,
         "description": description,
         "area": area,
@@ -84,18 +92,22 @@ class PropertyModel {
 
 class ImagesList {
   String url;
+  bool isPrimary ;
 
   ImagesList({
     required this.url,
+    required this.isPrimary,
   });
 
   factory ImagesList.fromJson(Map<String, dynamic> json) =>
       ImagesList(
         url: json["url"],
+        isPrimary: json["isPrimary"]??false,
       );
 
   Map<String, dynamic> toJson() =>
       {
         "url": url,
+        "isPrimary": isPrimary,
       };
 }

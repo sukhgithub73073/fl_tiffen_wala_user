@@ -12,3 +12,11 @@ class GetPropertyListEvent extends PropertyEvent {
   @override
   List<Object?> get props => [map];
 }
+class AddPropertyEvent extends PropertyEvent {
+  final Map<String, dynamic> map;
+
+  AddPropertyEvent({required this.map});
+
+  @override
+  List<Object?> get props => [map];
+}

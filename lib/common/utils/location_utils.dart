@@ -8,7 +8,7 @@ void checkPermissions(BuildContext context) {
       if (status) {
         checkLocationPermissions(context);
       } else {
-        showSnackBar(context, "GPS is not enabled please enable it");
+        showSnackBar(context, "error" ,"GPS is not enabled please enable it");
       }
     },
   );
@@ -32,9 +32,9 @@ void requestLocationPermissions(BuildContext context) {
       if (permission == LocationPermission.denied) {
         requestLocationPermissions(context);
       } else if (permission == LocationPermission.deniedForever) {
-        showSnackBar(context, "Location permissions are permanently denied");
+        showSnackBar(context, "error" ,"Location permissions are permanently denied");
       } else {
-        showSnackBar(context, "Location service granted");
+        showSnackBar(context,"error" , "Location service granted");
       }
     },
   );
